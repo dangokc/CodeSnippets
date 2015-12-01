@@ -1,0 +1,46 @@
+﻿@model AmarisGate.Model.OrderDetailsModel
+@using Amaris.XEditable.Extensions
+
+<table id="ComponentsTable"
+       class="table table-striped table-bordered"
+       data-reload-url="@Url.Action("ReloadComponentTable", "OrderDetails", new { id=Model.OrderId })">
+    <thead>
+        <tr>
+            <th>
+                <div style="width: 50px">Action</div>
+                <div class="dropdown">
+                    <button class="btn btn-info" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" style="min-width: 50px !important; text-align: center">
+                        <li>
+                            <span data-toggle="tooltip" title="Set myself as owner to all items !" data-placement="right">
+                                <button class="btn btn-info addSelfAsOwnerForAll"
+                                        type="button"
+                                        data-placement="top"
+                                        data-url="@Url.Action("SetSelfAsOwnerForAll", "OrderDetails", new {orderId = Model.OrderId})">
+                                    <i class="fa fa-thumbs-o-up"></i>
+                                </button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+            <th>Status</th>
+            <th>Material ID</th>
+            <th>Material</th>
+            <th>Product Name</th>
+            <th>Owner</th>
+            <th>Estimated Delivery Date</th>
+            <th>Price</th>
+            <th>Currency</th>
+            <th>Comment</th>
+        </tr>        
+    </thead>
+    <tbody>       
+        @foreach (var component in Model.Components)
+        {
+            @Html.Partial("_ComponentRow", component)            
+        }        
+    </tbody> 
+</table>

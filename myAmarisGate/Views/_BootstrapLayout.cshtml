@@ -1,0 +1,147 @@
+﻿@using Amaris.Security
+@using AmarisGate.Helpers
+
+@{
+    var currentemployee = ViewBag.Employee as Employee;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    @RenderSection("head", false)
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/select2")
+
+    <link href="~/Content/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="~/favicon.ico">
+
+    <!-- Google Maps AutoComplete-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+</head>
+
+<body>
+    <div id="wrap" class="page-container">
+
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="~/" title="Amaris">
+                        <img src="~/Images/logo.png">
+                    </a>
+                    <div class="nav-collapse collapse">
+
+                        <ul class="nav">
+                            @if (currentemployee.IsInRole("Home", "Admin"))
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle">Admin <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="@Url.Action("Index", "Material")">Materials</a></li>
+                                        <li><a href="@Url.Action("Index", "Package")">Packages</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            <li>@Html.ActionLink("Pending", "Pending", "Home") </li>
+                            <li>@Html.ActionLink("History", "Index", "History")</li>
+
+                            @if (currentemployee.IsInRole("Stock", "Index"))
+                            {
+                                <li>@Html.ActionLink("Get A Password", "Index", "Stock")</li>
+                            }
+                        </ul>
+
+                        <ul class="pull-right hidden-phone nav">
+                            @if (currentemployee.IsInRole("HOME", "Faker"))
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" id="fakeAuthLink" style="font-size: 14px;">
+                                        @ViewBag.Employee.Firstname
+                                        <img style="margin-left: 10px; margin-top: -6px; width: 32px; height: 32px;" src="@ViewBag.Picture">
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            @using (Html.BeginForm("FakeAuthentification", "Home", FormMethod.Get, new { style = "padding:0; margin-bottom:0; margin-top:5px;", id = "fakeAuthForm" }))
+                                            {
+                                                @Html.TextBox("newLogin", " ", new
+                                            {
+                                                data_select_autocomplete = true,
+                                                data_action = Url.Action("AutoCompletePeople", "Home"),
+                                                data_default_action = Url.Action("GetDefaultPersonForFakeAuthentication", "Home", new { login = UserHelper.UserName() }),
+                                                data_placeholder = "Employee",
+                                                @class = "input-large",
+                                                style = "margin-left: 20px; margin-bottom: 5px",
+                                                data_allowClear = false
+                                            })
+                                            }
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a>
+                                        @(currentemployee == null ? "" : currentemployee.Firstname)
+                                        <img style="margin-left: 10px; margin-top: -6px; width: 32px; height: 32px;" src="@(ViewBag.Picture ?? "")">
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" id="main">
+            @Html.Partial("_FeedbackButtons")
+            <div class="row-fluid" id="mainRow">
+                <div id="page" class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+
+        <div id="push"></div>
+    </div>
+    <div id="footer">
+        <div class="container-fluid">
+            <p></p>
+            <ul class="footer-links"></ul>
+        </div>
+        <span class="hidden" id="username">@User.Identity.Name</span>
+    </div>
+
+    <div class="modal fade" id="modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                @Html.Partial("~/Views/Material/_ModalCategoryCreatePopup.cshtml")
+            </div>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/libraries")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/amaris")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/shared")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

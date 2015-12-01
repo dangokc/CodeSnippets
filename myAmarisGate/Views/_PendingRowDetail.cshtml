@@ -1,0 +1,64 @@
+﻿@using System.Web.Mvc.Html
+@using Amaris.Security
+@using Amaris.XEditable.Extensions
+@model AmarisGate.Model.RequestViewModel
+@{
+    var currentemployee = ViewBag.Employee as Employee;
+    Boolean isHelpDesk = currentemployee.IsInRole("HOME", "HelpDesk");
+}
+<tr data-id="@Model.OrderId" style="height:50px">
+    <!--Order Id-->
+    <td style="line-height:1">
+        @Model.OrderId
+    </td>
+
+    <!-- Order Date-->
+    <td style="line-height:1">
+        @Model.RequestDate.ToShortDateString()
+    </td>
+
+    <!-- Scope-->
+    <td style="line-height:20px">
+        @if (Model.IsConcernedEmployeeStaff && Model.FunctionsLabel != null)
+        {
+            if (Model.FunctionsLabel.Count() == 1)
+            {
+                <p>
+                    @String.Join(",", Model.FunctionsLabel)
+                </p><br />
+            }
+            else
+            {
+                <a title="" href="#" data-original-title="Multiple function found" data-toggle="tooltip" data-placement="top">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </a> @String.Join(",", Model.FunctionsLabel.Distinct())
+            }
+        }
+        else
+        {   <p>Consultant – No package affected</p>
+
+        }
+    </td>
+
+    <!-- Employee Status -->
+    <td style="line-height:1">
+        @Model.ConcernedEmployeeStatusLabel
+    </td>
+
+    <!-- Ordered By-->
+    <td style="line-height:1">
+        @Model.OrderedBy
+    </td>
+
+    <!-- Comment -->
+    <td style="line-height:20px">
+        @Html.XEditable(Model, req => req.Comment, r => r.OrderId, @Url.Action("UpdateComment", "Home"), text: Model.Comment, options: new XEditableOptions
+        {
+            CanEdit = isHelpDesk,
+            //OnSave = "saveSuccessfullyNotification",
+            XEditableType = XEditableType.TextArea,
+            LimitChars = 15,
+            HtmlAttributes = new { title = Model.Comment }
+        })
+    </td>
+</tr>
