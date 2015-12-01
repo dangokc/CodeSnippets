@@ -1,0 +1,2 @@
+insert into CMDB_Scheduler ([JobName], [Frequency], [TimeToRun], [PostUrl], [IsRunning], [ApplicationId], [Disabled], [IsAutomatic], [DaysToRun])
+VALUES ('CommarkBudgetReminderForCOB', 'Weekly_Friday', '9','https://arp.amaris.com/CommarkBudget/Scheduler/ReminderForCOB', '0', '65' , '0', '1', '16' )
