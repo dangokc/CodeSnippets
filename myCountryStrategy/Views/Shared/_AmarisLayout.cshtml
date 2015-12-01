@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - @ViewBag.ApplicationDescription</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/Content/css/select2")
+    @RenderSection("head", required: false)
+    @* favicons and touch icons go here *@
+</head>
+<body>
+    @*<div id="wrap" class="page-container">*@
+    <div class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="amaris-logo" href="~/" title="Amaris">
+                    @*<img src="~/Content/images/amaris-logo.png" alt="">*@
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+
+                    @Html.Partial("_Menu")
+                    @RenderSection("menu", required: false)
+                </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    @Html.Partial("_GuideTour")
+                    @Html.UserMenu()
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="main">
+        <div class="row-fluid" id="mainRow">
+
+            @Html.BetaLogo()
+
+            <div id="alert">@Html.Partial("_alerts")</div>
+
+
+            <div id="feedback" class="hidden-sm hidden-xs off">
+                <a href="#" id="feedback-open" data-clips="/Clips/ParentBusinessService/RedirectTo/@ApplicationName">
+                </a>
+                <div class="btn-group" id="feedback-buttons">
+                    @Html.Modal("/feedback/home/showreportbug?applicationname=" + ApplicationName, "bug", "Bug", "Report a Bug")
+                    @Html.Modal("/feedback/home/showreportidea?applicationname=" + ApplicationName, "lightbulb-o", "Idea", "Report an Idea")
+                    @Html.Modal("/feedback/home/showapplicationdetails?applicationname=" + ApplicationName, "eye", "Details", "Application Details")
+                </div>
+            </div>
+
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <span class="loading"></span>
+                <!--Loaded async-->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </div>
+    <div id="modal-lg" class="modal fade">
+        <div class="modal-dialog" style="width: 860px; height: 1300px;">
+            <div class="modal-content">
+                <span class="loading"></span>
+                <!--Loaded async-->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+    </div>
+
+    <div class="popup alert alert-info " style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4>Information</h4>
+        <p class="content">
+        </p>
+    </div>
+
+    <div class="popup alert alert-success " style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4>Success</h4>
+        <p class="content">
+        </p>
+    </div>
+
+    <div class="popup alert alert-danger " style="display:none;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4>Attention!</h4>
+        <p class="content">
+        </p>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @Scripts.Render("~/bundles/amaris")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

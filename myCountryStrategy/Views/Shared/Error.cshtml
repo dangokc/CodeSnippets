@@ -1,0 +1,127 @@
+﻿@using System.Text.RegularExpressions;
+@using Amaris.Security
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    var applicationName = System.Configuration.ConfigurationManager.AppSettings["applicationName"];
+    var controllerName = Model.ControllerName;
+    var actionName = Model.ActionName;
+    var url = Request.Url;
+    var employee = ViewBag.LoggedEmployee as IEmployee;
+    var employeeInfo = employee == null ? "No info" : String.Format("{0} {1} | {2} | {3}", employee.Firstname, employee.Lastname, employee.EmployeeId, employee.Trigram);
+
+    ViewBag.Title = "Error - " + Model.Exception.Message;
+
+}
+
+<div style="margin: auto; width: 100%; text-align: center;">
+    <span class="error-image"></span>
+
+    <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+    <h4 class="text-danger">@Model.Exception.GetType().FullName - <small>@Model.Exception.Message</small></h4>
+    <div>
+        Contact
+        <a data-toggle="tooltip" data-placement="bottom" title="Send details to Helpdesk Team" href="mailto:911@amaris.com?subject=[@applicationName] @Model.Exception.GetType().Name - @Model.Exception.Message &amp;body=%0D%0A%0D%0A%0D%0ATechnical Details:%0D%0A%0D%0AApplication: @applicationName%0D%0AController: @controllerName%0D%0AAction: @actionName%0D%0AURL: @url%0D%0AServer: @Environment.MachineName%0D%0ALogin: @User.Identity.Name%0D%0AEmployee: @employeeInfo">911</a>
+    </div>
+</div>
+
+
+
+<a data-toggle="#details" class="btn btn-default btn-small" href="#details">Technical Details&nbsp;<i class="fa fa-plus"></i></a>
+<br />
+
+<div id="details" class="hidden container-fluid" style="margin-top:30px">
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped" id="technical">
+                <tbody id="details">
+                    <tr>
+                        <th>
+                            Application
+                        </th>
+                        <td>
+                            <code>@applicationName</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Controller
+                        </th>
+                        <td>
+                            <code>@controllerName</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <div>Action</div>
+                        </th>
+                        <td>
+                            <code>@actionName</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Login</th>
+                        <td><code>@User.Identity.Name</code></td>
+                    </tr>
+                    <tr>
+                        <th>Server</th>
+                        <td><code>@Environment.MachineName</code></td>
+                    </tr>
+                    <tr>
+                        <th>Employee</th>
+                        <td>
+                            <code>
+                                @employeeInfo
+                            </code>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+
+            <div class="alert alert-danger ">
+                @{
+                    var keywords = new string[] {
+                ViewContext.Controller.ValueProvider.GetValue("action").RawValue.ToString(),
+                ViewContext.Controller.ValueProvider.GetValue("controller").RawValue + "Controller"
+            };
+                    var stack = Model.Exception.StackTrace ?? "";
+                    var cssClass = "error-keyword";
+                    stack = keywords.Select(word => word.Trim())
+                        .Aggregate(stack, (current, pattern) => Regex.Replace(current, pattern,
+                                           String.Format("<span class=\"{0}\">{1}</span>",
+                                           cssClass, "$0"),
+                                           RegexOptions.IgnoreCase));
+                }
+                @foreach (var line in stack.Split('\n'))
+                {
+                    @Html.Raw(line)<br />
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function Toggle(source, elt) {
+            elt.toggleClass('hidden');
+            source.find('i').toggleClass('fa-plus');
+            source.find('i').toggleClass('fa-minus');
+        }
+
+        $('a[data-toggle]').click(function () {
+            Toggle($(this), $($(this).data('toggle')));
+        });
+
+        $(document).ready(function () {
+            Toggle($('a[href=' + window.location.hash + ']'), $(window.location.hash));
+        });
+    </script>
+}

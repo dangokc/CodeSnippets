@@ -1,0 +1,53 @@
+﻿@using Amaris.Select2.HtmlHelpers
+
+@using (Ajax.BeginForm("Index", null, new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "co_list", OnSuccess = "loadAllXeditable" }, new { id = "ajaxForm" }))
+{
+    <div class="col-xs-12" style="margin-bottom: 40px">
+        <div class="col-xs-12 col-md-12 col-lg-4" style="margin-top: 10px">
+            <div class="input-group">
+                @Html.TextBox("keyword", null, new {placeholder = "Search by Country Name...", id = "txtKW", @class = "form-control", autofocus = "autofocus"})
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-original-title="Search"><i class="glyphicon fa fa-search"></i></button>
+                    <span class="btn btn-danger" id="btnResetHistory" onclick="ResetSearch() " data-url="@Url.Action("Index", "Home")" data-toggle="tooltip" data-original-title="Reset"><i class="fa fa-remove"></i></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-7 col-lg-3" style="margin-top: 10px">
+            <div class="input-group">
+                @Html.Select2Ajax("lstPriorityTypeId", Url.Action("GetPriorityTypeList", "Home"), new Select2Option
+                {
+                    Multiple = true, 
+                    Placeholder = "Choose a Priority Type...", 
+                    MinimumInputLength = 0, 
+                    Width = "100%"
+                }, new { @class = "form-control" })
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-warning"><i class="fa fa-filter"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-5 col-lg-3" style="margin-top: 10px">
+            <div class="input-group">
+                @Html.Select2Ajax("lstDeadlineTypeId", Url.Action("GetDeadlineTypeList", "Home"), new Select2Option
+                {
+                    Multiple = true, 
+                    Placeholder = "Choose a Deadline Type...", 
+                    MinimumInputLength = 0, Width = "100%"
+                }, new { @class = "form-control" })
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-warning"><i class="fa fa-filter"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script>
+    function ResetSearch() {
+        $('form#ajaxForm')[0].reset();
+        $('form#ajaxForm .select2-ajax').select2('data', null);
+        $('form#ajaxForm').submit();
+    }
+</script>

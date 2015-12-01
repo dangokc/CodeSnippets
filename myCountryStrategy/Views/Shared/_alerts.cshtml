@@ -1,0 +1,11 @@
+@using Amaris.Application
+@foreach (var key in Amaris.Application.Extensions.EnumExtensions.Values<Alerts>())
+{
+    if (TempData.ContainsKey(key.ToString()))
+    {
+        <div class="alert alert-@key.ToString().ToLower()">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @Html.Raw(@TempData[key.ToString()])
+        </div>
+    }
+}
