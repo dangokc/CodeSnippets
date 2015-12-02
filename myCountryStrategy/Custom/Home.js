@@ -1,7 +1,6 @@
-﻿function LoadPartialView() {
-    var mUrl = $('#co_list').data('url');
+function LoadPartialView() {
     $.ajax({
-        url: mUrl,
+        url: $('#co_list').data('url');,
         method: 'POST',
         success: function (data) {
             $('#tableListId').html(data);
@@ -23,9 +22,8 @@ function LoadAFMView() {
 };
 
 function LoadDirectorView() {
-    var mUrl = $('#col-xs-1').data('url');
     $.ajax({
-        url: mUrl,
+        url: $('#col-xs-1').data('url'),
         method: 'POST',
         success: function (data) {
             $('#tableListId').html(data);
