@@ -76,7 +76,6 @@ namespace CountryStrategy.Models.Helper
                 // Check if filter Deadline Type have data
                 if (lstDeadlineTypeId.Any())
                 {
-
                     lstOpeningCountryPriorities =
                         lstOpeningCountryPriorities.Where(x => lstDeadlineTypeId.Any(deadLine => x.DeadlineTypeId == deadLine));
                 }
