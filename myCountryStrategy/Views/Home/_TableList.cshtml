@@ -76,8 +76,7 @@
                 <td>
                     @(Html.XEditable(item, i => i.PriorityOrder, i => i.PriorityId,
                     Url.Action("UpdateOrderOnPriority", "Home"),
-                    null,
-                    null,
+                    null, null,
                     new XEditableOptions
                     {
                         AllowClear = true,
@@ -86,12 +85,12 @@
                 </td>
                 <td>
                     @(  (item.PriorityTypeId != null)
-                        ? Html.XEditable(item, i => i.PriorityTypeId, i => i.PriorityId,
+                        Html.XEditable(item, i => i.PriorityTypeId, i => i.PriorityId,
                         Url.Action("UpdatePriority", "Home"),
                         Url.Action("GetPriorityTypeList", "Home"),
                         item.PriorityType.PriorityTypeName,
                         new XEditableOptions { AllowClear = true })
-                        : Html.XEditable(item, i => i.PriorityTypeId, i => i.PriorityId, Url.Action("UpdatePriority", "Home"), Url.Action("GetPriorityTypeList", "Home"), null, new XEditableOptions { AllowClear = true })
+                        )
                     )
                 </td>
 
@@ -114,6 +113,16 @@
                     )
                 </td>
                 <td>
+                @*  
+                    item: model,
+                    =>get EmployeeId,
+                    =>get PriorityId to pair with EmployeeId,
+                    invoke Action InsertDirectorPriority from Home Controller,
+                    List all available Employee,
+                    Attach multiple variable to controller,
+                    Show name of all selected Employee,
+                    OnSave to invoke JS when submit.
+                *@
                     @Html.XEditable(item, i => i.DirectorEmployeeGroup.Select(x => x.EmployeeId.ToString()), i => i.PriorityId,
                         Url.Action("InsertDirectorPriority", "Home"), Url.Action("GetEmployeeList", "Home", new { multiple = true }),
                         i => i.DirectorEmployeeGroup.Select(x => x.FullName),
