@@ -35,16 +35,12 @@ namespace CountryStrategy.Controllers
 
         public ActionResult GetTableList()
         {
-
             var model = new OcpModelView();
-
             model.LstOpeningCountryPriority = Db.GetAllPriority(Log).OrderByPriorityOrder();
-
             if (model.LstOpeningCountryPriority == null)
             {
                 Error("Something went wrong. Please consult Application Logs.");
             }
-
             return PartialView("_TableList", model);
         }
 
